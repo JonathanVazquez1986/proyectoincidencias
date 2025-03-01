@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistema de Incidencias</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
@@ -44,7 +43,7 @@
         <input id="email" type="email" placeholder="Correo Electrónico" class="w-full p-2 mb-3 border rounded">
         <input id="password" type="password" placeholder="Contraseña" class="w-full p-2 mb-3 border rounded">
         <button onclick="login()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Ingresar</button>
-        <p class="text-center mt-3">¿No tienes cuenta? <a href="#" class="text-blue-500">Regístrate</a></p>
+        <p class="text-center mt-3">¿No tienes cuenta? <a href="register.html" class="text-blue-500">Regístrate</a></p>
         <button onclick="loginWithGoogle()" class="w-full mt-3 flex items-center justify-center bg-red-500 text-white p-2 rounded hover:bg-red-600">
             <i class="fab fa-google mr-2"></i> Iniciar con Google
         </button>
