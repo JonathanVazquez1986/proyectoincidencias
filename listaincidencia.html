@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Incidencias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJYn3kJFHaJjltP9SScpgM3SEo14aWq6I",
+            authDomain: "proyecto-incidencias-8923b.firebaseapp.com",
+            projectId: "proyecto-incidencias-8923b",
+            storageBucket: "proyecto-incidencias-8923b.firebasestorage.app",
+            messagingSenderId: "719168710499",
+            appId: "1:719168710499:web:ba8a21ee5ee0054d639556"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore();
+        
+        async function cargarIncidencias() {
+            const tabla = document.getElementById("tabla-incidencias");
+            const snapshot = await getDocs(collection(db, "incidencias"));
+            tabla.innerHTML = "";
+            snapshot.forEach(doc => {
+                const incidencia = doc.data();
+                tabla.innerHTML += `
+                    <tr class="border-b">
+                        <td class="p-2">${incidencia.fechaIncidencia}</td>
+                        <td class="p-2">${incidencia.quienGenera}</td>
+                        <td class="p-2">${incidencia.responsable}</td>
+                        <td class="p-2">${incidencia.descripcion}</td>
+                        <td class="p-2">${incidencia.fechaSeguimiento}</td>
+                        <td class="p-2">${incidencia.fechaCumplimiento}</td>
+                        <td class="p-2">${incidencia.estado}</td>
+                    </tr>`;
+            });
+        }
+        
+        document.addEventListener("DOMContentLoaded", cargarIncidencias);
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+    <header class="w-full bg-blue-600 text-white p-4 flex justify-between">
+        <h1 class="text-lg font-bold">Lista de Incidencias</h1>
+        <nav>
+            <ul class="flex space-x-4">
+                <li><a href="dashboard.html" class="hover:underline">Dashboard</a></li>
+                <li><a href="incidencias.html" class="hover:underline">Listado de Incidencias</a></li>
+                <li><a href="nueva_incidencia.html" class="hover:underline">Nueva Incidencia</a></li>
+                <li><a href="perfil.html" class="hover:underline">Perfil</a></li>
+                <li><a href="#" onclick="logout()" class="hover:underline">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="max-w-6xl mt-10 p-6 bg-white rounded shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Listado de Incidencias</h2>
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2 border">Fecha Incidencia</th>
+                    <th class="p-2 border">Quién Genera</th>
+                    <th class="p-2 border">Responsable</th>
+                    <th class="p-2 border">Descripción</th>
+                    <th class="p-2 border">Fecha Seguimiento</th>
+                    <th class="p-2 border">Fecha Cumplimiento</th>
+                    <th class="p-2 border">Estado</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-incidencias" class="text-center">
+                <!-- Aquí se insertarán las incidencias desde Firebase -->
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

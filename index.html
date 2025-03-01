@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Incidencias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJYn3kJFHaJjltP9SScpgM3SEo14aWq6I",
+            authDomain: "proyecto-incidencias-8923b.firebaseapp.com",
+            projectId: "proyecto-incidencias-8923b",
+            storageBucket: "proyecto-incidencias-8923b.firebasestorage.app",
+            messagingSenderId: "719168710499",
+            appId: "1:719168710499:web:ba8a21ee5ee0054d639556"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => window.location.href = "dashboard.html")
+                .catch(error => document.getElementById("error-message").innerText = error.message);
+        }
+        
+        function loginWithGoogle() {
+            signInWithPopup(auth, provider)
+                .then(() => window.location.href = "dashboard.html")
+                .catch(error => document.getElementById("error-message").innerText = error.message);
+        }
+    </script>
+</head>
+<body class="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h2 class="text-2xl font-bold text-center mb-4">Iniciar Sesión</h2>
+        <input id="email" type="email" placeholder="Correo Electrónico" class="w-full p-2 mb-3 border rounded">
+        <input id="password" type="password" placeholder="Contraseña" class="w-full p-2 mb-3 border rounded">
+        <button onclick="login()" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Ingresar</button>
+        <p class="text-center mt-3">¿No tienes cuenta? <a href="#" class="text-blue-500">Regístrate</a></p>
+        <button onclick="loginWithGoogle()" class="w-full mt-3 flex items-center justify-center bg-red-500 text-white p-2 rounded hover:bg-red-600">
+            <i class="fab fa-google mr-2"></i> Iniciar con Google
+        </button>
+        <p id="error-message" class="text-red-500 text-center mt-3"></p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Incidencia - Sistema de Incidencias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJYn3kJFHaJjltP9SScpgM3SEo14aWq6I",
+            authDomain: "proyecto-incidencias-8923b.firebaseapp.com",
+            projectId: "proyecto-incidencias-8923b",
+            storageBucket: "proyecto-incidencias-8923b.firebasestorage.app",
+            messagingSenderId: "719168710499",
+            appId: "1:719168710499:web:ba8a21ee5ee0054d639556"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore();
+        
+        async function registrarIncidencia() {
+            const incidencia = {
+                fechaIncidencia: document.getElementById("fechaIncidencia").value,
+                quienGenera: document.getElementById("quienGenera").value,
+                titulo: document.getElementById("titulo").value,
+                responsable: document.getElementById("responsable").value,
+                descripcion: document.getElementById("descripcion").value,
+                fechaSeguimiento: document.getElementById("fechaSeguimiento").value,
+                fechaCumplimiento: document.getElementById("fechaCumplimiento").value,
+                estado: "Abierta",
+                fechaCreacion: new Date().toISOString()
+            };
+            
+            if (Object.values(incidencia).every(val => val)) {
+                await addDoc(collection(db, "incidencias"), incidencia);
+                alert("Incidencia registrada correctamente");
+                window.location.href = "incidencias.html";
+            } else {
+                alert("Por favor, completa todos los campos");
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+    <header class="w-full bg-blue-600 text-white p-4 flex justify-between">
+        <h1 class="text-lg font-bold">Nueva Incidencia</h1>
+        <nav>
+            <ul class="flex space-x-4">
+                <li><a href="dashboard.html" class="hover:underline">Dashboard</a></li>
+                <li><a href="incidencias.html" class="hover:underline">Listado de Incidencias</a></li>
+                <li><a href="nueva_incidencia.html" class="hover:underline">Nueva Incidencia</a></li>
+                <li><a href="perfil.html" class="hover:underline">Perfil</a></li>
+                <li><a href="#" onclick="logout()" class="hover:underline">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="max-w-2xl mt-10 p-6 bg-white rounded shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Registrar Nueva Incidencia</h2>
+        
+        <label class="block">Fecha de Incidencia:</label>
+        <input id="fechaIncidencia" type="date" class="w-full p-2 border rounded mb-3">
+        
+        <label class="block">Quién Genera:</label>
+        <input id="quienGenera" type="text" class="w-full p-2 border rounded mb-3">
+        
+        <label class="block">Título:</label>
+        <input id="titulo" type="text" class="w-full p-2 border rounded mb-3">
+        
+        <label class="block">Responsable:</label>
+        <input id="responsable" type="text" class="w-full p-2 border rounded mb-3">
+        
+        <label class="block">Descripción:</label>
+        <textarea id="descripcion" class="w-full p-2 border rounded mb-3"></textarea>
+        
+        <label class="block">Fecha de Seguimiento:</label>
+        <input id="fechaSeguimiento" type="date" class="w-full p-2 border rounded mb-3">
+        
+        <label class="block">Fecha de Cumplimiento:</label>
+        <input id="fechaCumplimiento" type="date" class="w-full p-2 border rounded mb-3">
+        
+        <button onclick="registrarIncidencia()" class="bg-blue-500 text-white px-4 py-2 rounded">Registrar</button>
+    </div>
+</body>
+</html>
