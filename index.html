@@ -34,7 +34,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
         import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
         
         const firebaseConfig = {
@@ -60,8 +60,14 @@
             const email = document.getElementById("login-email").value;
             const password = document.getElementById("login-password").value;
             signInWithEmailAndPassword(auth, email, password)
-                .then(() => window.location.href = "dashboard.html")
-                .catch(error => document.getElementById("login-error").innerText = error.message);
+                .then(() => {
+                    console.log("Usuario autenticado con éxito");
+                    window.location.href = "dashboard.html";
+                })
+                .catch(error => {
+                    console.error("Error al iniciar sesión:", error);
+                    document.getElementById("login-error").innerText = error.message;
+                });
         }
         
         function register() {
@@ -77,14 +83,26 @@
                             email: email,
                             role: "usuario"
                         });
+                        console.log("Usuario registrado con éxito");
                         alert("Registro exitoso");
                         window.location.href = "dashboard.html";
                     })
-                    .catch(error => document.getElementById("register-error").innerText = error.message);
+                    .catch(error => {
+                        console.error("Error al registrar usuario:", error);
+                        document.getElementById("register-error").innerText = error.message;
+                    });
             } else {
                 alert("Por favor, completa todos los campos");
             }
         }
+        
+        // Verifica si hay un usuario autenticado y redirige al dashboard automáticamente
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("Usuario ya autenticado, redirigiendo al dashboard");
+                window.location.href = "dashboard.html";
+            }
+        });
     </script>
 </body>
 </html>
