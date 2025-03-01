@@ -31,8 +31,26 @@
         </div>
         
     </div>
-
-    <script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJYn3kJFHaJjltP9SScpgM3SEo14aWq6I",
+            authDomain: "proyecto-incidencias-8923b.firebaseapp.com",
+            projectId: "proyecto-incidencias-8923b",
+            storageBucket: "proyecto-incidencias-8923b.firebasestorage.app",
+            messagingSenderId: "719168710499",
+            appId: "1:719168710499:web:ba8a21ee5ee0054d639556"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore();
+        
         function toggleForm() {
             document.getElementById("login-form").classList.toggle("hidden");
             document.getElementById("register-form").classList.toggle("hidden");
@@ -41,14 +59,31 @@
         function login() {
             const email = document.getElementById("login-email").value;
             const password = document.getElementById("login-password").value;
-            alert(`Intentando iniciar sesión con: ${email}`);
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => window.location.href = "dashboard.html")
+                .catch(error => document.getElementById("login-error").innerText = error.message);
         }
         
         function register() {
             const email = document.getElementById("register-email").value;
             const password = document.getElementById("register-password").value;
             const nombre = document.getElementById("register-nombre").value;
-            alert(`Registrando usuario: ${nombre}, Email: ${email}`);
+            
+            if (email && password && nombre) {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then(async (userCredential) => {
+                        await setDoc(doc(db, "usuarios", userCredential.user.uid), {
+                            nombre: nombre,
+                            email: email,
+                            role: "usuario"
+                        });
+                        alert("Registro exitoso");
+                        window.location.href = "dashboard.html";
+                    })
+                    .catch(error => document.getElementById("register-error").innerText = error.message);
+            } else {
+                alert("Por favor, completa todos los campos");
+            }
         }
     </script>
 </body>
